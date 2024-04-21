@@ -1,0 +1,17 @@
+name: App2
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'app2/**'
+  push:
+    branches:
+      - main
+
+jobs:
+  app2:
+    name: app2
+    runs-on: ubuntu-20.04
+    steps:
+      - run: exit 0
