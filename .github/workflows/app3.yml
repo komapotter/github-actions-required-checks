@@ -1,0 +1,17 @@
+name: App3
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'app3/**'
+  push:
+    branches:
+      - main
+
+jobs:
+  app3:
+    name: app3
+    runs-on: ubuntu-20.04
+    steps:
+      - run: exit 0

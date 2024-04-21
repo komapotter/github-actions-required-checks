@@ -1,0 +1,19 @@
+name: App1
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+  push:
+    branches:
+      - main
+
+jobs:
+  app1:
+    name: app1
+    runs-on: ubuntu-20.04
+    steps:
+      - run: exit 0
