@@ -1,1 +1,1 @@
-app1
+package main

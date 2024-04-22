@@ -1,0 +1,24 @@
+name: _ Dummy
+
+on:
+  pull_request:
+
+jobs:
+  app1:
+    name: app1
+    runs-on: ubuntu-20.04
+    if: ${{ false }}
+    steps:
+      - run: exit 0
+  app2:
+    name: app2
+    runs-on: ubuntu-20.04
+    if: ${{ false }}
+    steps:
+      - run: exit 0
+  app3:
+    name: app3
+    runs-on: ubuntu-20.04
+    if: ${{ false }}
+    steps:
+      - run: exit 0
