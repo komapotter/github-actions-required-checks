@@ -35,7 +35,7 @@ jobs:
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
 
-  build:
+  app2:
     runs-on: ubuntu-20.04
     needs: check_for_changes
     if: ${{ needs.check_for_changes.outputs.has_changes == 'true' }}
