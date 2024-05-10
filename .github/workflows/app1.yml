@@ -3,17 +3,38 @@ name: App1
 on:
   pull_request:
     types: [opened, synchronize]
-    paths:
-      - '**.go'
-      - 'go.mod'
-      - 'go.sum'
   push:
     branches:
       - main
 
 jobs:
-  app1:
-    name: app1
+  check_for_changes:
     runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        name: checkout "${{ github.base_ref }}"
+        with:
+          fetch-depth: 1
+          ref: ${{ github.base_ref }}
+      - uses: actions/checkout@v4
+        name: checkout "${{ github.head_ref }}"
+        with:
+          fetch-depth: 1
+          ref: ${{ github.head_ref}}
+      - name: check for file changes
+        id: filter
+        run: |
+          CHANGES=$(git diff origin/${{ github.base_ref }} --name-only | grep -E '(\.go$|go\.mod$|go\.sum$)' || true)
+          if [ -z "$CHANGES" ]; then
+            echo "No changes detected."
+            echo "has_changes=false" >> $GITHUB_ENV
+          else
+            echo "changes detected."
+            echo "has_changes=true" >> $GITHUB_ENV
+          fi
+
+  build:
+    runs-on: ubuntu-20.04
+    if: env.has_changes == 'true'
     steps:
       - run: exit 0
