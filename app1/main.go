@@ -1,3 +1,3 @@
 package main
 
-const foo = "var"
+//const foo = "var"
