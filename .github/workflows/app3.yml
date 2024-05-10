@@ -3,15 +3,41 @@ name: App3
 on:
   pull_request:
     types: [opened, synchronize]
-    paths:
-      - 'app3/**'
   push:
     branches:
       - main
 
 jobs:
-  app3:
-    name: app3
+  check_for_changes:
     runs-on: ubuntu-20.04
+    outputs:
+      has_changes: ${{ steps.filter.outputs.has_changes }}
+    steps:
+      - uses: actions/checkout@v4
+        name: checkout "${{ github.base_ref }}"
+        with:
+          fetch-depth: 1
+          ref: ${{ github.base_ref }}
+      - uses: actions/checkout@v4
+        name: checkout "${{ github.head_ref }}"
+        with:
+          fetch-depth: 1
+          ref: ${{ github.head_ref}}
+      - name: git diff
+        id: filter
+        run: |
+          CHANGES=$(git diff origin/"${{ github.base_ref }}" --name-only | grep -E '^(app3/)' || true)
+          if [ -z "$CHANGES" ]; then
+            echo "No changes detected."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changes detected."
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    runs-on: ubuntu-20.04
+    needs: check_for_changes
+    if: ${{ needs.check_for_changes.outputs.has_changes == 'true' }}
     steps:
       - run: exit 0
